@@ -1,7 +1,7 @@
 #ifndef READINGINPUT_H
 #define READINGINPUT_H
 
-char* readingInput(int argc, char** argv);
+void readingInput(int argc, char** argv, char** msg);
 
 
 #endif // nd
