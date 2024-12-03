@@ -13,6 +13,10 @@ build/readingInput.o: src/readingInput.c
 	@echo "Creating readingInput.o";
 	@gcc -c src/readingInput.c -o build/readingInput.o
 
+build/preprocessing.o: src/preprocessing.c
+	@echo "Creating preprocessing.o";
+	@gcc -c src/preprocessing.c -o build/preprocessing.c
+
 
 
 clean:
