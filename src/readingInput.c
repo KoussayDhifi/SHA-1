@@ -11,7 +11,7 @@
     fprintf(stderr, "Uncompatible number of positional arguments expected 2 given %d.\n Hint: If you want to pass a string with spaces put it inside \"\"\n",argc-1);
     exit(EXIT_FAILURE);
   }
-
+  
 
   if (strcmp(*(argv+1),STRING_FLAG) == 0) {
 
