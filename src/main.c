@@ -9,20 +9,22 @@ void main (int argc, char** argv) {
 	char* msg;
   readingInput(argc, argv, &msg);
   
+  const size_t msgLength = strlen(msg);
+  const size_t msgLengthInBits = 8*strlen(msg);
+
+
   printf("%s\n",msg);
 
-  char** codedMsg = (char**) malloc((strlen(msg)+1)*sizeof(char*));
+  char* codedMsg = (char*) malloc((msgLengthInBits+1)*sizeof(char));
   encode(msg, codedMsg);
 
-  char* newMsg = (char*) malloc(strlen(msg)*sizeof(char));
+  char* newMsg = (char*) malloc(msgLength*sizeof(char));
   
-  for (int i = 0; i<strlen(msg); i++) {
-    printf("%s",codedMsg[i]);
-  }
+  printf("%s", codedMsg);
 
-  decode(codedMsg, newMsg, strlen(msg));
+  decode(codedMsg, newMsg, msgLengthInBits);
 
-  printf("\n%s\n",newMsg);
+  printf("This is the decoded MSG: %s\n",newMsg);
 
 
 }
