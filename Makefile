@@ -1,9 +1,9 @@
 
 all:final
 
-final: build/main.o build/readingInput.o build/encode.o build/decode.o 
+final: build/main.o build/readingInput.o build/encode.o build/decode.o build/padding.o build/calcPaddedSize.o  
 	@echo "Creating executable..."
-	@gcc build/readingInput.o build/main.o  build/encode.o build/decode.o -o final
+	@gcc build/readingInput.o build/main.o  build/encode.o build/decode.o build/padding.o build/calcPaddedSize.o -o final
 
 build/main.o: src/main.c
 	@echo "Creating main.o"
@@ -15,12 +15,23 @@ build/readingInput.o: src/readingInput.c
 
 
 build/encode.o : src/encode.c
-	@echo "Creating encode.c";
+	@echo "Creating encode.o";
 	@gcc -c src/encode.c -o build/encode.o
 
 build/decode.o : src/decode.c
-	@echo "Creating decode.c";
+	@echo "Creating decode.o";
 	@gcc -c src/decode.c -o build/decode.o
+
+build/padding.o : src/padding.c
+	@echo "Creating padding.o"
+	@gcc -c src/padding.c -o build/padding.o
+
+
+
+build/calcPaddedSize.o : src/calcPaddedSize.c
+	@echo "Creating padding.o"
+	@gcc -c src/calcPaddedSize.c -o build/calcPaddedSize.o
+
 
 
 clean:

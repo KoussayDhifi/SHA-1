@@ -16,12 +16,12 @@ void binary2Char(char* binary, char* c) {
 }
 
 
-void decode (char* codedMsg, char* decodedMsg, size_t sizeCodedMsg) {
+void decode (char* codedMsg, size_t codedMsgSize,char* decodedMsg) {
 
   char* aux = (char*) malloc(8*sizeof(char));
   int j = 0;
   int auxCounter = 0;
-  for (int i = 0; i<sizeCodedMsg; i++) {
+  for (int i = 0; i<codedMsgSize; i++) {
    
    *(aux + auxCounter) = *(codedMsg + i);
     auxCounter++; 
