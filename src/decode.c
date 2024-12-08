@@ -4,11 +4,11 @@
 #include <math.h>
 #include "../include/decode.h"
 
-void binary2Char(char* binary, char* c) {
+void binary2Char(int* binary, char* c) {
   int power = 7;
   *c = 0;
   for (int i = 0; i<8; i++) {
-    *c += (*(binary+i) == '1')? (1 << power) : 0;
+    *c += (*(binary+i))? (1 << power) : 0;
     power--;
   }
   
@@ -16,9 +16,9 @@ void binary2Char(char* binary, char* c) {
 }
 
 
-void decode (char* codedMsg, size_t codedMsgSize,char* decodedMsg) {
+void decode (int* codedMsg, size_t codedMsgSize,char* decodedMsg) {
 
-  char* aux = (char*) malloc(8*sizeof(char));
+  int aux[8];
   int j = 0;
   int auxCounter = 0;
   for (int i = 0; i<codedMsgSize; i++) {
@@ -36,6 +36,6 @@ void decode (char* codedMsg, size_t codedMsgSize,char* decodedMsg) {
    
 
   }
-  free(aux);
+  //free(aux);
 
 }

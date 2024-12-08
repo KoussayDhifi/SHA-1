@@ -14,16 +14,18 @@ void main (int argc, char** argv) {
   const size_t msgLength = strlen(msg);
   const size_t msgLengthInBits = 8*strlen(msg);
 
-  char* codedMsg = (char*) malloc((msgLengthInBits+1)*sizeof(char));
+  int* codedMsg = (int*) malloc((msgLengthInBits+1)*sizeof(int));
   encode(msg, codedMsg);
 
 
   const size_t paddedMsgSize = calcPaddedSize(msgLengthInBits);
-  char* paddedMsg = (char*) malloc((paddedMsgSize+1)*sizeof(char));
+  int* paddedMsg = (int*) malloc((paddedMsgSize+1)*sizeof(int));
 
   padding(codedMsg, msgLengthInBits, paddedMsg, paddedMsgSize);
 
-  printf("PaddedMsg: %s \n", paddedMsg);
-  
+  for (int i = 0; i<paddedMsgSize; i++) {
+    printf("%d",paddedMsg[i]);
+  }
+ 
 
 }

@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define FIRST_PADDING '1'
-#define LATER_PADDING '0'
+#define FIRST_PADDING 1
+#define LATER_PADDING 0
 
-void number2Binary(int number, char* binary) {
+void number2Binary(int number, int* binary) {
   
   for (int i = 0; i<64; i++) {
-    *(binary+63-i) = (number % 2 == 0)? '0' : '1';
+    *(binary+63-i) = (number % 2 == 1);
     number /= 2;
   }
   
-  *(binary+64) = '\0';
+  
 
 }
  
@@ -19,9 +19,9 @@ void number2Binary(int number, char* binary) {
 
 
 
-void padding (char* codedMsg, size_t codedMsgSize ,char* paddedMsg, size_t paddedMsgSize) {
+void padding (int* codedMsg, size_t codedMsgSize ,int* paddedMsg, size_t paddedMsgSize) {
   
-  char* binary = (char*) malloc(64*sizeof(char));
+  int binary[64];
   number2Binary(codedMsgSize, binary);
 
   int j = 0; 
@@ -31,13 +31,11 @@ void padding (char* codedMsg, size_t codedMsgSize ,char* paddedMsg, size_t padde
       *(paddedMsg + i) = *(codedMsg+i);
     }else if (i == codedMsgSize) {
       *(paddedMsg + i) = FIRST_PADDING;
-    }else if (i < paddedMsgSize-64) {
+    }else if (i < paddedMsgSize-63) {
       *(paddedMsg + i) = LATER_PADDING;
     } else { 
       *(paddedMsg + i) = *(binary + j);
       j++;
     }
   }
-  *(paddedMsg+paddedMsgSize) = '\0';
-
 }
