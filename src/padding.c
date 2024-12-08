@@ -38,6 +38,6 @@ void padding (char* codedMsg, size_t codedMsgSize ,char* paddedMsg, size_t padde
       j++;
     }
   }
-
+  *(paddedMsg+paddedMsgSize) = '\0';
 
 }
