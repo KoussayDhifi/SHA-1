@@ -1,7 +1,7 @@
 #ifndef PADDING
 #define PADDING
 
-void padding (char* codedMsg, size_t codedMsgSize, char* paddedMsg, size_t paddedMsgSize);
+void padding (int* codedMsg, size_t codedMsgSize, int* paddedMsg, size_t paddedMsgSize);
 
 
 #endif // !

@@ -2,7 +2,7 @@
 #define DECODE
 
 
-void decode(char* codedMsg, size_t codedMsgSize,char* decodedMsg);
+void decode(int* codedMsg, size_t codedMsgSize,char* decodedMsg);
 
 
 #endif // !

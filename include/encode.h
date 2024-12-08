@@ -1,6 +1,6 @@
 #ifndef ENCODE
 #define ENCODE
 
-void encode (char* msg, char* codedMsg);
+void encode (char* msg, int* codedMsg);
 
 #endif // !
