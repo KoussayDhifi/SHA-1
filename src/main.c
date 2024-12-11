@@ -8,6 +8,16 @@
 #include "../include/padding.h"
 #include "../include/functions.h"
 
+void showArray (int* T, int n) {
+  printf("T: \n");
+  for (int i = 0; i<n; i++) {
+    printf("%d|",T[i]);
+  }
+}
+
+
+
+
 void main (int argc, char** argv) {
 	char* msg;
   readingInput(argc, argv, &msg);
@@ -24,9 +34,9 @@ void main (int argc, char** argv) {
 
   padding(codedMsg, msgLengthInBits, paddedMsg, paddedMsgSize);
 
-  for (int i = 0; i<paddedMsgSize; i++) {
-    printf("%d",paddedMsg[i]);
-  }
+
+    
+    
  
 
 }
