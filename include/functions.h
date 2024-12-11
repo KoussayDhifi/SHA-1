@@ -1,7 +1,7 @@
 #ifndef FUNCTIONS
 #define FUNCTIONS
 
-void functions(char* x, char* y, char* z, int t);
+void functions(int* x, int* y, int* z, int t, int* res);
 
 
 #endif
