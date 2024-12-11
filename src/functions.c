@@ -6,15 +6,58 @@
 #define BLOCKSIZE 32
 
 void CH (int* x, int* y, int* z, int* res) {
-  res = logicalXOR(logicalAND(x,y), logicalAND(logicalNOT(x), z));
+
+  int* logicalAnd = logicalAND(x,y);
+  int* not = logicalNOT(x);
+  int* logicalAndTwo = logicalAND(not, z);
+
+  int* logicalxor = logicalXOR(logicalAnd, logicalAndTwo);
+
+  for (int i = 0; i<BLOCKSIZE; i++) {
+    *(res + i) = *(logicalxor + i); 
+  }
+  
+
+  free(logicalxor);
+  free (logicalAndTwo);
+  free (logicalAnd);
+  free (not);
+
 }
 
 void PARITY (int* x, int* y, int* z, int* res) {
-  res = logicalXOR(logicalXOR(x,y), z);
+  int* logicalxor = logicalXOR(x,y);
+
+  int* logicalxorTwo = logicalXOR(logicalxor, z);
+
+  for (int i = 0; i<BLOCKSIZE; i++) {
+    *(res + i) = *(logicalxorTwo + i);
+  }
+  
+  free (logicalxorTwo);
+  free (logicalxor);
+  
 }
 
 void MAJ (int* x, int* y, int* z, int* res) {
-  res = logicalXOR( logicalXOR( logicalAND(x,y), logicalAND(x,z) ), logicalAND(y,z) );
+
+  int* logicalAndOne = logicalAND(x,y);
+  int* logicalAndTwo = logicalAND(x,z);
+  int* logicalAndThree = logicalAND(y,z);
+  int* logicalxor = logicalXOR(logicalAndOne, logicalAndTwo);
+  int* logicalxorTwo = logicalXOR( logicalXOR( logicalAND(x,y), logicalAND(x,z) ), logicalAND(y,z) );
+  
+  
+  for (int i = 0; i<BLOCKSIZE; i++) {
+    *(res + i) = *(logicalxorTwo + i);
+  }
+
+  free (logicalxorTwo);
+  free(logicalxor);
+  free (logicalAndOne);
+  free (logicalAndTwo);
+  free (logicalAndThree);
+
 }
 
 
