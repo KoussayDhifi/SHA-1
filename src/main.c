@@ -6,6 +6,7 @@
 #include "../include/decode.h"
 #include "../include/calcPaddedSize.h"
 #include "../include/padding.h"
+#include "../include/functions.h"
 
 void main (int argc, char** argv) {
 	char* msg;
