@@ -1,7 +1,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 #include "../include/encode.h"
+
+
+
+void number2Binary(uintmax_t number, int* binary, int n) {
+  
+  for (int i = 0; i<n; i++) {
+    *(binary+n-1-i) = (number % 2 == 1);
+    number /= 2;
+  }
+  
+  
+
+}
 
 
 void char2Binary (char c, int* res) {

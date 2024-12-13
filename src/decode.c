@@ -2,7 +2,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <stdint.h>
 #include "../include/decode.h"
+
+
+uintmax_t binary2Number (int* x, int n) {
+  int power = n-1;
+  uintmax_t res = 0;
+  
+
+    for (int i = 0; i<n; i++) {
+    
+    res += (*(x + i))? (1 << power) : 0;
+    power--;
+  }
+  
+
+  return res;
+
+}
+
+
 
 void binary2Char(int* binary, char* c) {
   int power = 7;

@@ -1,6 +1,8 @@
 #ifndef FUNCTIONS
 #define FUNCTIONS
 
+
+void modulusAddition (int* x, int* y, int* res, int w);
 void CH (int* x, int* y, int* z, int* res);
 void PARITY (int* x, int* y, int* z, int* res);
 void MAJ (int* x, int* y, int* z, int* res);
