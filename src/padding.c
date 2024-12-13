@@ -1,19 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../include/encode.h"
 
 #define FIRST_PADDING 1
 #define LATER_PADDING 0
-
-void number2Binary(int number, int* binary) {
-  
-  for (int i = 0; i<64; i++) {
-    *(binary+63-i) = (number % 2 == 1);
-    number /= 2;
-  }
-  
-  
-
-}
+#define LENGTHMSG 64
  
 
 
@@ -21,8 +12,8 @@ void number2Binary(int number, int* binary) {
 
 void padding (int* codedMsg, size_t codedMsgSize ,int* paddedMsg, size_t paddedMsgSize) {
   
-  int binary[64];
-  number2Binary(codedMsgSize, binary);
+  int binary[LENGTHMSG];
+  number2Binary(codedMsgSize, binary, LENGTHMSG);
 
   int j = 0; 
   for (int i = 0; i<paddedMsgSize; i++) {
@@ -31,7 +22,7 @@ void padding (int* codedMsg, size_t codedMsgSize ,int* paddedMsg, size_t paddedM
       *(paddedMsg + i) = *(codedMsg+i);
     }else if (i == codedMsgSize) {
       *(paddedMsg + i) = FIRST_PADDING;
-    }else if (i < paddedMsgSize-63) {
+    }else if (i < paddedMsgSize-LENGTHMSG-1) {
       *(paddedMsg + i) = LATER_PADDING;
     } else { 
       *(paddedMsg + i) = *(binary + j);

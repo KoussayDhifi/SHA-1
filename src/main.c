@@ -62,7 +62,8 @@ void main (int argc, char** argv) {
   }
   
   showArray(x,32);
-  ROTL(x, 5, res);
+  showArray(y,32);
+  modulusAddition(x, y, res, 32);
   showArray(res,32);
     
     

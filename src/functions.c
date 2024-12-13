@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include <stdint.h>
 #include "../include/functions.h"
 #include "../include/logicalOperators.h"
+#include "../include/decode.h"
+#include "../include/encode.h"
 
 #define BLOCKSIZE 32
 #define ZERO 0
+
+
+
 
 
 void leftShift(int* x, int n, int* res) {
@@ -136,6 +143,21 @@ void functions (int* x, int* y, int* z, int t, int* res) {
     exit(EXIT_FAILURE);
   }
 
+
+}
+
+
+
+void modulusAddition (int* x, int* y, int* res, int w) {
+  
+  uintmax_t X = binary2Number(x, BLOCKSIZE);
+  uintmax_t Y = binary2Number(y, BLOCKSIZE);
+  
+  uintmax_t Z = (X + Y) % (1ULL << w);
+  
+  
+  
+  number2Binary(Z, res, BLOCKSIZE);
 
 }
 
