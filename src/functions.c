@@ -4,6 +4,68 @@
 #include "../include/logicalOperators.h"
 
 #define BLOCKSIZE 32
+#define ZERO 0
+
+
+void leftShift(int* x, int n, int* res) {
+  
+  for (int i = n; i<BLOCKSIZE+n; i++) {
+    if (i < BLOCKSIZE) {
+    *(res + (i-n) ) = *(x + i); 
+    
+    }else {
+      
+      *(res + (i-n)) = ZERO;
+
+    }
+  }
+
+}
+
+
+void rightShift(int* x, int n, int* res) {
+
+  for (int i = 0; i<BLOCKSIZE; i++) {
+    
+    if (i < n) {
+      *(res + i) = ZERO;
+    
+    }else {
+      
+      *(res + i) = *(x + i);
+    
+
+    }
+  }
+}
+
+
+
+
+void ROTL (int* x, int n, int* res) {
+  
+  int* xLeftShifted = (int*) malloc(BLOCKSIZE * sizeof(int));
+  leftShift(x, n, xLeftShifted);
+  
+  printf("left: \n");
+  
+
+  int* xRightShifted = (int*) malloc(BLOCKSIZE * sizeof(int));
+  rightShift(x, BLOCKSIZE - n, xRightShifted);
+  
+  int* leftOrRight = logicalOR(xLeftShifted, xRightShifted);
+
+  for (int i = 0; i<BLOCKSIZE; i++) {
+    *(res + i) = *(leftOrRight + i);
+  }
+  
+
+  free (leftOrRight);
+  free (xRightShifted);
+  free (xLeftShifted);
+
+} 
+
 
 void CH (int* x, int* y, int* z, int* res) {
 

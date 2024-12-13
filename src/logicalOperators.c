@@ -51,3 +51,20 @@ int* logicalXOR (int* x, int* y) {
   return result;
 
 }
+
+int* logicalOR (int* x, int* y) {
+  DECLARE(result);
+  ALLOCATE(result);
+  
+  for (int i = 0; i<BLOCKSIZE; i++) {
+
+  *(result + i) = *(x + i) | *(y + i);
+  }
+
+  return result;
+
+}
+
+
+
+
