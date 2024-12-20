@@ -7,17 +7,18 @@
 #include "../include/decode.h"
 #include "../include/encode.h"
 
-#define BLOCKSIZE 32
+#define WORDSIZE 32
+#define BLOCKSIZE 512
 #define ZERO 0
-
+#define NUMBEROFSHIFTS 1
 
 
 
 
 void leftShift(int* x, int n, int* res) {
   
-  for (int i = n; i<BLOCKSIZE+n; i++) {
-    if (i < BLOCKSIZE) {
+  for (int i = n; i<WORDSIZE+n; i++) {
+    if (i < WORDSIZE) {
     *(res + (i-n) ) = *(x + i); 
     
     }else {
@@ -32,7 +33,7 @@ void leftShift(int* x, int n, int* res) {
 
 void rightShift(int* x, int n, int* res) {
 
-  for (int i = 0; i<BLOCKSIZE; i++) {
+  for (int i = 0; i<WORDSIZE; i++) {
     
     if (i < n) {
       *(res + i) = ZERO;
@@ -51,18 +52,18 @@ void rightShift(int* x, int n, int* res) {
 
 void ROTL (int* x, int n, int* res) {
   
-  int* xLeftShifted = (int*) malloc(BLOCKSIZE * sizeof(int));
+  int* xLeftShifted = (int*) malloc(WORDSIZE * sizeof(int));
   leftShift(x, n, xLeftShifted);
   
   printf("left: \n");
   
 
-  int* xRightShifted = (int*) malloc(BLOCKSIZE * sizeof(int));
-  rightShift(x, BLOCKSIZE - n, xRightShifted);
+  int* xRightShifted = (int*) malloc(WORDSIZE * sizeof(int));
+  rightShift(x, WORDSIZE - n, xRightShifted);
   
   int* leftOrRight = logicalOR(xLeftShifted, xRightShifted);
 
-  for (int i = 0; i<BLOCKSIZE; i++) {
+  for (int i = 0; i<WORDSIZE; i++) {
     *(res + i) = *(leftOrRight + i);
   }
   
@@ -82,7 +83,7 @@ void CH (int* x, int* y, int* z, int* res) {
 
   int* logicalxor = logicalXOR(logicalAnd, logicalAndTwo);
 
-  for (int i = 0; i<BLOCKSIZE; i++) {
+  for (int i = 0; i<WORDSIZE; i++) {
     *(res + i) = *(logicalxor + i); 
   }
   
@@ -99,7 +100,7 @@ void PARITY (int* x, int* y, int* z, int* res) {
 
   int* logicalxorTwo = logicalXOR(logicalxor, z);
 
-  for (int i = 0; i<BLOCKSIZE; i++) {
+  for (int i = 0; i<WORDSIZE; i++) {
     *(res + i) = *(logicalxorTwo + i);
   }
   
@@ -117,7 +118,7 @@ void MAJ (int* x, int* y, int* z, int* res) {
   int* logicalxorTwo = logicalXOR( logicalXOR( logicalAND(x,y), logicalAND(x,z) ), logicalAND(y,z) );
   
   
-  for (int i = 0; i<BLOCKSIZE; i++) {
+  for (int i = 0; i<WORDSIZE; i++) {
     *(res + i) = *(logicalxorTwo + i);
   }
 
@@ -150,15 +151,71 @@ void functions (int* x, int* y, int* z, int t, int* res) {
 
 void modulusAddition (int* x, int* y, int* res, int w) {
   
-  uintmax_t X = binary2Number(x, BLOCKSIZE);
-  uintmax_t Y = binary2Number(y, BLOCKSIZE);
+  uintmax_t X = binary2Number(x, WORDSIZE);
+  uintmax_t Y = binary2Number(y, WORDSIZE);
   
   uintmax_t Z = (X + Y) % (1ULL << w);
   
   
   
-  number2Binary(Z, res, BLOCKSIZE);
+  number2Binary(Z, res, WORDSIZE);
 
 }
 
 
+
+/*
+   The function blockDivider extracts
+   The t-th word in the block of number numberOfBlock from paddedMsg
+   and that word is stored in the int* res
+*/
+void blockDivider (int* paddedMsg, int* res, int t, int numberOfBlock) {
+  
+  int startingOfBlock = (numberOfBlock-1)*BLOCKSIZE;
+  int block[BLOCKSIZE];
+
+  for (int i = startingOfBlock; i<startingOfBlock+BLOCKSIZE; i++) {
+    *(block + (i-startingOfBlock)) = *(paddedMsg + i);
+  }
+  
+  int startingOfWord = t * WORDSIZE;
+
+  for (int i = startingOfWord; i<startingOfWord+WORDSIZE; i++) {
+    *(res + (i-startingOfWord)) = *(block + i);
+  }
+
+}
+
+
+void messageScheduler (int* paddedMsg, int* res, int t, int n) {
+
+  if (t >= 0 && t <= 15) {
+
+    blockDivider(paddedMsg, res, t, n);
+
+  }else {
+   
+    int Wt3 [WORDSIZE];
+    int Wt8 [WORDSIZE];
+    int Wt14 [WORDSIZE];
+    int Wt16 [WORDSIZE];
+
+    messageScheduler (paddedMsg, Wt3, t-3, n);
+    messageScheduler (paddedMsg, Wt8, t-8, n);
+    messageScheduler (paddedMsg, Wt14, t-14, n);
+    messageScheduler (paddedMsg, Wt16, t-16, n);
+    
+    int* XorOne = logicalXOR(Wt3, Wt8);
+    int* XorTwo = logicalXOR(Wt14, Wt16);
+    int* finalXOR = logicalXOR(XorOne, XorTwo);
+   
+
+    ROTL(finalXOR, NUMBEROFSHIFTS, res);
+    
+    free (XorOne);
+    free (XorTwo);
+    free (finalXOR);
+  }
+
+
+}

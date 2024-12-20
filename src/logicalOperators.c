@@ -4,7 +4,9 @@
 
 
 #define BLOCKSIZE 32
+
 #define DECLARE(result) int* result = NULL;
+
 #define ALLOCATE(result)  \
 result = (int*) malloc(BLOCKSIZE * sizeof(int)); \
 if (result == NULL) { \

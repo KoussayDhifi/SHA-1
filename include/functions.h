@@ -11,5 +11,7 @@ void ROTL (int* x, int n, int* res);
 
 void functions(int* x, int* y, int* z, int t, int* res);
 
+void messageScheduler (int* paddedMsg, int* res, int t, int n); 
+
 
 #endif
