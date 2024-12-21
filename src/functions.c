@@ -10,6 +10,7 @@
 #define WORDSIZE 32
 #define BLOCKSIZE 512
 #define ZERO 0
+#define ITERATIONS 80
 #define NUMBEROFSHIFTS 1
 
 
@@ -188,25 +189,22 @@ void blockDivider (int* paddedMsg, int* res, int t, int numberOfBlock) {
 
 
 void messageScheduler (int* paddedMsg, int* res, int t, int n) {
+  
+  static int wCache [ITERATIONS][WORDSIZE];
 
   if (t >= 0 && t <= 15) {
 
     blockDivider(paddedMsg, res, t, n);
+    
+    for (int i = 0; i<WORDSIZE; i++) {
+      wCache[t][i] = res[i];
+    }
 
   }else {
    
-    int Wt3 [WORDSIZE];
-    int Wt8 [WORDSIZE];
-    int Wt14 [WORDSIZE];
-    int Wt16 [WORDSIZE];
-
-    messageScheduler (paddedMsg, Wt3, t-3, n);
-    messageScheduler (paddedMsg, Wt8, t-8, n);
-    messageScheduler (paddedMsg, Wt14, t-14, n);
-    messageScheduler (paddedMsg, Wt16, t-16, n);
     
-    int* XorOne = logicalXOR(Wt3, Wt8);
-    int* XorTwo = logicalXOR(Wt14, Wt16);
+    int* XorOne = logicalXOR(wCache[t-3], wCache[t-8]);
+    int* XorTwo = logicalXOR(wCache[t-14], wCache[t-16]);
     int* finalXOR = logicalXOR(XorOne, XorTwo);
    
 
