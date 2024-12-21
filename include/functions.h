@@ -13,5 +13,6 @@ void functions(int* x, int* y, int* z, int t, int* res);
 
 void messageScheduler (int* paddedMsg, int* res, int t, int n); 
 
+void copyArray (int* sourceArray, int* destArray, int length);
 
 #endif

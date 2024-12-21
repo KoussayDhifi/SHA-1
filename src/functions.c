@@ -219,3 +219,17 @@ void messageScheduler (int* paddedMsg, int* res, int t, int n) {
 
 
 }
+
+
+void copyArray (int* sourceArray, int* destArray, int length) {
+
+
+  for (int i = 0; i<length; i++) {
+
+    * (destArray + i) * (sourceArray + i);
+
+  }
+
+}
+
+
