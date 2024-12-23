@@ -7,6 +7,17 @@
 #include "../include/calcPaddedSize.h"
 #include "../include/padding.h"
 #include "../include/functions.h"
+#include "../include/hashComputation.h"
+
+
+#define H0 "67452301"
+#define H1 "efcdab89"
+#define H2 "98badcfe"
+#define H3 "10325476"
+#define H4 "c3d2e1f0"
+
+
+#define LENGOFHASH 160
 
 void showArray (int* T, int n) {
   printf("T: \n");
@@ -33,40 +44,36 @@ void main (int argc, char** argv) {
   int* paddedMsg = (int*) malloc((paddedMsgSize+1)*sizeof(int));
 
   padding(codedMsg, msgLengthInBits, paddedMsg, paddedMsgSize);
-
-
   
-  int x[32]; 
-  int y[32];
-  int z[32];
-  int var;
-  int* res = (int*) malloc(32 * sizeof(int));
+  int numberOfBlocks = paddedMsgSize/512;
+  int resultOfHash[LENGOFHASH];
+  int workingVariables [5][32];
+  int codedMsgOne [32];
+  int codedMsgTwo [32];
+  int codedMsgThree [32];
+  int codedMsgFour [32];
+  int codedMsgFive [32];
 
-  for (int i = 0; i<3; i++) {
-    for (int j = 0; j<32; j++) {
-      var = rand()%2;
-      switch (i) {
-        case 0:
-          x[j] = var;
-          break;
-        case 1:
-          y[j] = var;
-          break;
-        case 2:
-          z[j] = var;
-          break;
-        default:
-          break;
-      }
-    }
-  }
+  encode (H0, codedMsgOne);
+  encode (H1, codedMsgTwo);
+  encode (H2, codedMsgThree);
+  encode (H3, codedMsgFour);
+  encode (H4, codedMsgFive);
+
+  copyArray (codedMsgOne, workingVariables[0], 32);
+  copyArray (codedMsgTwo, workingVariables[1], 32);
+  copyArray (codedMsgThree, workingVariables[2], 32);
+  copyArray (codedMsgFour, workingVariables[3], 32);
+  copyArray (codedMsgFive, workingVariables[4], 32);
+
+
+  hashComputation (numberOfBlocks, paddedMsg, paddedMsgSize, resultOfHash , LENGOFHASH, workingVariables);  
   
-  showArray(x,32);
-  showArray(y,32);
-  modulusAddition(x, y, res, 32);
-  showArray(res,32);
-    
-    
- 
+  char decodedResult[40];
+
+  decode (resultOfHash, LENGOFHASH, decodedResult);
+
+  printf("\nSHA1 = %s",decodedResult);
+  
 
 }

@@ -1,5 +1,5 @@
 
-FILES = main readingInput encode decode padding calcPaddedSize functions logicalOperators
+FILES = main readingInput encode decode padding calcPaddedSize functions logicalOperators hashComputation
 
 FLAG = -lm
 

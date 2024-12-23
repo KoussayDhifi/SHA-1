@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "../include/functions.h"
+#include "../include/encode.h"
+
+#define LENGTHWORKINGVAR 32
+#define NUMBEROFCONSTANTS 4
+#define NUMBEROFROTATIONSONE 5
+#define NUMBEROFROTATIONSTWO 30
+#define WORKINGVARIABLES 5
+#define COMPUTATIONS 80
+#define K0 "5a827999"
+#define K1 "6ed9eba1"
+#define K2 "8f1bbcdc"
+#define K3 "ca62c1d6"
+ 
+
+void generateArrayOfSHAConstants (int K[NUMBEROFCONSTANTS][LENGTHWORKINGVAR]) {
+  encode(K0, K[0]);
+  encode(K1, K[1]);
+  encode(K2, K[2]);
+  encode(K3, K[3]);
+}
+
+
+
+void hashComputation (int numberOfBlocks, int* paddedMsg, size_t paddedMsgSize, int* resultOfHash , size_t lengthOfHash, int workingVariables[5][32]) {
+  
+  int a[32] = {0};
+  int b[32] = {0};
+  int c[32] = {0};
+  int d[32] = {0};
+  int e[32] = {0};
+  
+  int K[NUMBEROFCONSTANTS][LENGTHWORKINGVAR];
+  generateArrayOfSHAConstants(K);
+  
+  int modularSumOne[32] = {0};
+  int modularSumTwo[32] = {0};
+  int modularSumThree[32] = {0};
+  int modularSumFour[32] = {0};
+  int modularSumFive[32] = {0};
+  int T[32] = {0};
+
+  int rotationResult[32] = {0};
+  int functionResult[32] = {0};
+  int messageSchedulerResult[32] = {0};
+  int indexOfK;
+  for (int i = 0; i<numberOfBlocks; i++) {
+    
+    copyArray (workingVariables[0], a, LENGTHWORKINGVAR);
+    copyArray (workingVariables[1], b, LENGTHWORKINGVAR);
+    copyArray (workingVariables[2], c, LENGTHWORKINGVAR);
+    copyArray (workingVariables[3], d, LENGTHWORKINGVAR);
+    copyArray (workingVariables[4], e, LENGTHWORKINGVAR);
+   
+    for (int t = 0; t<COMPUTATIONS; t++) {
+
+      if (t <= 19 && t >= 0) {
+        indexOfK = 0;
+      }else if (t >= 20 && t <= 39){
+        indexOfK = 1;
+      }else if (t >= 40 && t <= 59) {
+        indexOfK = 2;
+      }else {
+        indexOfK = 3;
+      }
+      
+
+      ROTL(a, NUMBEROFROTATIONSONE, rotationResult);
+
+      functions(b, c, d, t, functionResult);
+
+      //messageScheduler(paddedMsg, messageSchedulerResult, t, i);
+
+      modulusAddition(rotationResult, functionResult, modularSumOne, LENGTHWORKINGVAR);
+      modulusAddition(e, K[indexOfK], modularSumTwo, LENGTHWORKINGVAR);
+      modulusAddition(modularSumOne, modularSumTwo, modularSumThree, LENGTHWORKINGVAR);
+
+      modulusAddition (modularSumThree, messageSchedulerResult, T, LENGTHWORKINGVAR);
+ 
+      
+      copyArray (d, e, LENGTHWORKINGVAR);
+      copyArray (c, d , LENGTHWORKINGVAR);
+      ROTL (b, NUMBEROFROTATIONSTWO, rotationResult);
+      copyArray (rotationResult, c, LENGTHWORKINGVAR);
+      copyArray (a, b, LENGTHWORKINGVAR);
+      copyArray (T, a, LENGTHWORKINGVAR);
+
+    }
+
+    modulusAddition(a, workingVariables[0], modularSumOne, LENGTHWORKINGVAR);
+    modulusAddition(b, workingVariables[1], modularSumTwo, LENGTHWORKINGVAR);
+    modulusAddition(c, workingVariables[2], modularSumThree, LENGTHWORKINGVAR);
+    modulusAddition(e, workingVariables[3], modularSumFour, LENGTHWORKINGVAR);
+    modulusAddition(e, workingVariables[4], modularSumFive, LENGTHWORKINGVAR);
+    
+    copyArray (modularSumOne, workingVariables[0], LENGTHWORKINGVAR);
+    copyArray (modularSumTwo, workingVariables[1], LENGTHWORKINGVAR);
+    copyArray (modularSumThree, workingVariables[2], LENGTHWORKINGVAR);
+    copyArray (modularSumFour, workingVariables[3], LENGTHWORKINGVAR);
+    copyArray (modularSumFive, workingVariables[4], LENGTHWORKINGVAR);
+
+    
+    
+  }
+  
+  int k = 0;
+  for (int i = 0; i<WORKINGVARIABLES; i++) {
+    for (int j = 0; j<LENGTHWORKINGVAR; j++) {
+      * (resultOfHash + k) = workingVariables[i][j];
+      k++;
+    }
+  }
+  
+
+
+}

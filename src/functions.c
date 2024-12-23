@@ -190,8 +190,10 @@ void blockDivider (int* paddedMsg, int* res, int t, int numberOfBlock) {
 
 void messageScheduler (int* paddedMsg, int* res, int t, int n) {
   
-  static int wCache [ITERATIONS][WORDSIZE];
+  if (paddedMsg == NULL | res == NULL) printf("INVALID");
 
+  static int wCache [ITERATIONS][WORDSIZE];
+   
   if (t >= 0 && t <= 15) {
 
     blockDivider(paddedMsg, res, t, n);
@@ -224,7 +226,7 @@ void copyArray (int* sourceArray, int* destArray, int length) {
 
   for (int i = 0; i<length; i++) {
 
-    * (destArray + i) * (sourceArray + i);
+    * (destArray + i) = * (sourceArray + i);
 
   }
 
