@@ -56,7 +56,6 @@ void ROTL (int* x, int n, int* res) {
   int* xLeftShifted = (int*) malloc(WORDSIZE * sizeof(int));
   leftShift(x, n, xLeftShifted);
   
-  printf("left: \n");
   
 
   int* xRightShifted = (int*) malloc(WORDSIZE * sizeof(int));
@@ -170,33 +169,83 @@ void modulusAddition (int* x, int* y, int* res, int w) {
    The t-th word in the block of number numberOfBlock from paddedMsg
    and that word is stored in the int* res
 */
-void blockDivider (int* paddedMsg, int* res, int t, int numberOfBlock) {
+void blockDivider (int* paddedMsg, int res[32], int t, int numberOfBlock, int paddedMsgSize, size_t resSize) {
   
   int startingOfBlock = (numberOfBlock-1)*BLOCKSIZE;
   int block[BLOCKSIZE];
+  
+  if (numberOfBlock <= 0 || (numberOfBlock - 1)* BLOCKSIZE >= paddedMsgSize) {
+
+    printf("Invalid Block number \n");
+    printf("%d\n",numberOfBlock);
+    exit(1);
+
+  }
+
+  if (t * WORDSIZE >= BLOCKSIZE) {
+    printf("Invalid T \n");
+    exit(1);
+  }
+  if (startingOfBlock + BLOCKSIZE > paddedMsgSize) {
+      printf("Buffer overflow");
+      exit(1);
+
+
+    }
 
   for (int i = startingOfBlock; i<startingOfBlock+BLOCKSIZE; i++) {
-    *(block + (i-startingOfBlock)) = *(paddedMsg + i);
+    if (i >= paddedMsgSize) {
+      printf("Can't access this memory");
+      exit(1);
+    }else if ( (i-startingOfBlock) >= BLOCKSIZE ) {
+      printf("Problem in block,");
+      exit(1);
+
+    }else {
+      *(block + (i-startingOfBlock)) = *(paddedMsg + i);
+    }
   }
   
   int startingOfWord = t * WORDSIZE;
 
+if (startingOfWord + WORDSIZE > BLOCKSIZE) {
+  printf("Exceeds block size");
+  exit(1);
+}
   for (int i = startingOfWord; i<startingOfWord+WORDSIZE; i++) {
+    
+    if (i >= BLOCKSIZE) {
+      printf("Exceeds block");
+      exit(1);
+    }else if  ( (i-startingOfWord) >= 32){
+      printf("Exceeds result");
+      exit(1);
+    }else {
     *(res + (i-startingOfWord)) = *(block + i);
+    }
+  }
+ 
+  
+
+  if (resSize < WORDSIZE*sizeof(int)) {
+    printf("Buffer size mismatch \n");
+    exit(1);
   }
 
 }
 
 
-void messageScheduler (int* paddedMsg, int* res, int t, int n) {
+void messageScheduler (int* paddedMsg, int res[32], int t, int n, int paddedMsgSize, size_t resSize) {
+  char wordToDebug[8];
+
+  if (paddedMsg == NULL || res == NULL) printf("INVALID");
+
+  static int wCache [ITERATIONS][WORDSIZE] = {0};
   
-  if (paddedMsg == NULL | res == NULL) printf("INVALID");
-
-  static int wCache [ITERATIONS][WORDSIZE];
    
-  if (t >= 0 && t <= 15) {
+  if (t <= 15) {
 
-    blockDivider(paddedMsg, res, t, n);
+    blockDivider(paddedMsg, res, t, n, paddedMsgSize, resSize);
     
     for (int i = 0; i<WORDSIZE; i++) {
       wCache[t][i] = res[i];
@@ -208,13 +257,19 @@ void messageScheduler (int* paddedMsg, int* res, int t, int n) {
     int* XorOne = logicalXOR(wCache[t-3], wCache[t-8]);
     int* XorTwo = logicalXOR(wCache[t-14], wCache[t-16]);
     int* finalXOR = logicalXOR(XorOne, XorTwo);
-   
+    
+    
 
     ROTL(finalXOR, NUMBEROFSHIFTS, res);
-    
+     for (int i = 0; i<WORDSIZE; i++) {
+      wCache[t][i] = res[i];
+    }
+   
+    printf("%s = ", wordToDebug);
     free (XorOne);
     free (XorTwo);
     free (finalXOR);
+    
   }
 
 

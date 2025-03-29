@@ -26,25 +26,25 @@ void generateArrayOfSHAConstants (int K[NUMBEROFCONSTANTS][LENGTHWORKINGVAR]) {
 
 void hashComputation (int numberOfBlocks, int* paddedMsg, size_t paddedMsgSize, int* resultOfHash , size_t lengthOfHash, int workingVariables[5][32]) {
   
-  int a[32] = {0};
-  int b[32] = {0};
-  int c[32] = {0};
-  int d[32] = {0};
-  int e[32] = {0};
+  int a[LENGTHWORKINGVAR] = {0};
+  int b[LENGTHWORKINGVAR] = {0};
+  int c[LENGTHWORKINGVAR] = {0};
+  int d[LENGTHWORKINGVAR] = {0};
+  int e[LENGTHWORKINGVAR] = {0};
   
   int K[NUMBEROFCONSTANTS][LENGTHWORKINGVAR];
   generateArrayOfSHAConstants(K);
   
-  int modularSumOne[32] = {0};
-  int modularSumTwo[32] = {0};
-  int modularSumThree[32] = {0};
-  int modularSumFour[32] = {0};
-  int modularSumFive[32] = {0};
-  int T[32] = {0};
+  int modularSumOne[LENGTHWORKINGVAR] = {0};
+  int modularSumTwo[LENGTHWORKINGVAR] = {0};
+  int modularSumThree[LENGTHWORKINGVAR] = {0};
+  int modularSumFour[LENGTHWORKINGVAR] = {0};
+  int modularSumFive[LENGTHWORKINGVAR] = {0};
+  int T[LENGTHWORKINGVAR] = {0};
 
-  int rotationResult[32] = {0};
-  int functionResult[32] = {0};
-  int messageSchedulerResult[32] = {0};
+  int rotationResult[LENGTHWORKINGVAR] = {0};
+  int functionResult[LENGTHWORKINGVAR] = {0};
+  int messageSchedulerResult[LENGTHWORKINGVAR] = {0};
   int indexOfK;
   for (int i = 0; i<numberOfBlocks; i++) {
     
@@ -68,11 +68,14 @@ void hashComputation (int numberOfBlocks, int* paddedMsg, size_t paddedMsgSize, 
       
 
       ROTL(a, NUMBEROFROTATIONSONE, rotationResult);
-
+//printf("Calling messageScheduler for t=%d and i=%d",t,i);
       functions(b, c, d, t, functionResult);
-
-      //messageScheduler(paddedMsg, messageSchedulerResult, t, i);
-
+     size_t size = sizeof(messageSchedulerResult); 
+      
+    
+     messageScheduler(paddedMsg, messageSchedulerResult, t, i+1, paddedMsgSize, size);
+    
+      
       modulusAddition(rotationResult, functionResult, modularSumOne, LENGTHWORKINGVAR);
       modulusAddition(e, K[indexOfK], modularSumTwo, LENGTHWORKINGVAR);
       modulusAddition(modularSumOne, modularSumTwo, modularSumThree, LENGTHWORKINGVAR);
@@ -81,18 +84,19 @@ void hashComputation (int numberOfBlocks, int* paddedMsg, size_t paddedMsgSize, 
  
       
       copyArray (d, e, LENGTHWORKINGVAR);
+
       copyArray (c, d , LENGTHWORKINGVAR);
       ROTL (b, NUMBEROFROTATIONSTWO, rotationResult);
       copyArray (rotationResult, c, LENGTHWORKINGVAR);
       copyArray (a, b, LENGTHWORKINGVAR);
       copyArray (T, a, LENGTHWORKINGVAR);
-
+    
     }
-
+    
     modulusAddition(a, workingVariables[0], modularSumOne, LENGTHWORKINGVAR);
     modulusAddition(b, workingVariables[1], modularSumTwo, LENGTHWORKINGVAR);
     modulusAddition(c, workingVariables[2], modularSumThree, LENGTHWORKINGVAR);
-    modulusAddition(e, workingVariables[3], modularSumFour, LENGTHWORKINGVAR);
+    modulusAddition(d, workingVariables[3], modularSumFour, LENGTHWORKINGVAR);
     modulusAddition(e, workingVariables[4], modularSumFive, LENGTHWORKINGVAR);
     
     copyArray (modularSumOne, workingVariables[0], LENGTHWORKINGVAR);
@@ -113,6 +117,6 @@ void hashComputation (int numberOfBlocks, int* paddedMsg, size_t paddedMsgSize, 
     }
   }
   
-
-
 }
+
+

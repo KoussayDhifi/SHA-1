@@ -44,7 +44,7 @@ void main (int argc, char** argv) {
   int* paddedMsg = (int*) malloc((paddedMsgSize+1)*sizeof(int));
 
   padding(codedMsg, msgLengthInBits, paddedMsg, paddedMsgSize);
-  
+  printf("SIZE_PADDED_MSG: %d", paddedMsgSize); 
   int numberOfBlocks = paddedMsgSize/512;
   int resultOfHash[LENGOFHASH];
   int workingVariables [5][32];
@@ -72,8 +72,12 @@ void main (int argc, char** argv) {
   char decodedResult[40];
 
   decode (resultOfHash, LENGOFHASH, decodedResult);
+  
+  showArray(resultOfHash, LENGOFHASH);
 
   printf("\nSHA1 = %s",decodedResult);
   
-
+  //free (msg);
+  //free (codedMsg);
+  //free (paddedMsg);
 }

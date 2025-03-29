@@ -9,11 +9,11 @@ all:final
 
 final: ${OBJ} 
 	@echo "Creating executable..."
-	@gcc ${OBJ} -o final ${FLAG}
+	@gcc -fno-stack-protector  ${OBJ} -o final ${FLAG}
 
 build/%.o : src/%.c
 	@echo "Compiling $< into $@ ..."
-	@gcc -c $< -o $@ ${FLAG}
+	@gcc -fno-stack-protector -c  $< -o $@ ${FLAG}
 
 
 clean:
