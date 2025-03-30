@@ -265,7 +265,7 @@ void messageScheduler (int* paddedMsg, int res[32], int t, int n, int paddedMsgS
       wCache[t][i] = res[i];
     }
    
-    printf("%s = ", wordToDebug);
+    
     free (XorOne);
     free (XorTwo);
     free (finalXOR);

@@ -16,14 +16,24 @@
 #define H3 "10325476"
 #define H4 "c3d2e1f0"
 
-
+#define LENGTHHEXADEC 40
 #define LENGOFHASH 160
+#define LENGTHWORKINGVARIABLES 8
+#define LENGTHWORKINGVARIABLESCONVERSION 32
 
 void showArray (int* T, int n) {
   printf("T: \n");
   for (int i = 0; i<n; i++) {
     printf("%d",T[i]);
   }
+}
+
+void showArrayChar (char* T, int n) {
+  printf("T: \n");
+  for (int i = 0; i<n; i++) {
+    printf("%c",T[i]);
+  }
+
 }
 
 
@@ -36,7 +46,7 @@ void main (int argc, char** argv) {
   const size_t msgLength = strlen(msg);
   const size_t msgLengthInBits = 8*strlen(msg);
 
-  int* codedMsg = (int*) malloc((msgLengthInBits+1)*sizeof(int));
+int* codedMsg = (int*) malloc((msgLengthInBits+1)*sizeof(int));
   encode(msg, codedMsg);
 
 
@@ -54,11 +64,11 @@ void main (int argc, char** argv) {
   int codedMsgFour [32];
   int codedMsgFive [32];
 
-  encode (H0, codedMsgOne);
-  encode (H1, codedMsgTwo);
-  encode (H2, codedMsgThree);
-  encode (H3, codedMsgFour);
-  encode (H4, codedMsgFive);
+  hex2Binary (H0, LENGTHWORKINGVARIABLES,codedMsgOne, LENGTHWORKINGVARIABLESCONVERSION);
+  hex2Binary (H1, LENGTHWORKINGVARIABLES,codedMsgTwo, LENGTHWORKINGVARIABLESCONVERSION);
+  hex2Binary (H2, LENGTHWORKINGVARIABLES,codedMsgThree, LENGTHWORKINGVARIABLESCONVERSION);
+  hex2Binary (H3, LENGTHWORKINGVARIABLES,codedMsgFour, LENGTHWORKINGVARIABLESCONVERSION);
+  hex2Binary (H4, LENGTHWORKINGVARIABLES,codedMsgFive, LENGTHWORKINGVARIABLESCONVERSION);
 
   copyArray (codedMsgOne, workingVariables[0], 32);
   copyArray (codedMsgTwo, workingVariables[1], 32);
@@ -73,9 +83,14 @@ void main (int argc, char** argv) {
 
   decode (resultOfHash, LENGOFHASH, decodedResult);
   
+  char hexaDecimalResult [LENGTHHEXADEC];
+  binary2Hex (resultOfHash, LENGOFHASH, hexaDecimalResult, LENGTHHEXADEC);
+  printf("\nSHA1 = ");
+  showArrayChar(hexaDecimalResult, LENGTHHEXADEC);
+
   showArray(resultOfHash, LENGOFHASH);
 
-  printf("\nSHA1 = %s",decodedResult);
+  
   
   //free (msg);
   //free (codedMsg);

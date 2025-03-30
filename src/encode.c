@@ -2,24 +2,23 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <math.h>
 #include "../include/encode.h"
+#include "../include/decode.h"
 #include "../include/functions.h"
 
 #define NUMBEROFBITS 8
+#define LENGTHOFCONVERSION 4
 
 
 
-int hexLength(unsigned int num) {
-    return (num == 0) ? 1 : (int)(log(num) / log(16)) + 1;
-}
-
-int allLength (char* array, int size) {
+/*int allLength (char* array, int size) {
   int res = 0;
   for (int i = 0; i<size; i++) {
     res += hexLength( *(array + i) );
   }
   return res;
-}
+}*/
 
 void number2Binary(uintmax_t number, int* binary, int n) {
   
@@ -32,6 +31,33 @@ void number2Binary(uintmax_t number, int* binary, int n) {
 
 }
 
+int correspondingNumberHex (char c) {
+  if (c >= '0' && c <= '9') {
+    return c - '0';
+  }else {
+    return c - 'a' + 10;  
+  }
+}
+
+void hex2Binary (char* hexArray, int lengthOfHex, int* binaryArray, int lengthOfBinaryArray) {
+  
+  int binaryFormat [LENGTHOFCONVERSION] = {0};
+  int binaryArrayIndex = 0;
+
+  for (int i = 0; i<lengthOfHex; i++) {
+    int decimalNumber = correspondingNumberHex(* (hexArray + i));
+    number2Binary(decimalNumber, binaryFormat, LENGTHOFCONVERSION);
+
+    for (int j = 0; j<LENGTHOFCONVERSION; j++) {
+      *(binaryArray + binaryArrayIndex ++) = * (binaryFormat + j);
+    }
+
+  }
+
+
+}
+
+
 
 void char2Binary (char c, int* res) {
   int charValue = c;
@@ -43,24 +69,7 @@ void char2Binary (char c, int* res) {
 
 }
 
-void char2Hex (char c, char* res, int lengthResult) {
-  int charValue = c;
-  
-  for (int i = 0; i<lengthResult; i++) {
-    int remainder = charValue % 16;
-    
-    if (remainder < 10) {
-      *(res+lengthResult-1-i) = '0' + remainder; 
-    }else {
-      *(res+lengthResult-1-i) = 'a' + (remainder - 10);
-    }
-
-    charValue /= 16;
-  } 
-
-}
-
-void word2Hex (char* word, char* codedMsg, int lengthWord, int lengthCodedMsg) {
+/*void word2Hex (char* word, char* codedMsg, int lengthWord, int lengthCodedMsg) {
   
   int j = 0;
 
@@ -69,6 +78,7 @@ void word2Hex (char* word, char* codedMsg, int lengthWord, int lengthCodedMsg) {
     int lengthOfHex = hexLength( *(word + i) );
     char* aux = (char*) malloc(lengthOfHex * sizeof(char));
     char2Hex (*(word + i), aux, lengthOfHex);
+    printf("char[%d] = %s\n",i, aux);
     
     for (int k = 0; k<lengthOfHex; k++) {
       *(codedMsg + j) = *(aux + k);
@@ -81,7 +91,7 @@ void word2Hex (char* word, char* codedMsg, int lengthWord, int lengthCodedMsg) {
     
   
 
-}
+}*/
 
 
 void encode (char* msg, int* codedMsg) {
