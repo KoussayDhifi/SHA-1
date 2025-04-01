@@ -22,14 +22,14 @@
 #define LENGTHWORKINGVARIABLESCONVERSION 32
 
 void showArray (int* T, int n) {
-  printf("T: \n");
+  
   for (int i = 0; i<n; i++) {
     printf("%d",T[i]);
   }
 }
 
 void showArrayChar (char* T, int n) {
-  printf("T: \n");
+  
   for (int i = 0; i<n; i++) {
     printf("%c",T[i]);
   }
@@ -48,7 +48,9 @@ void main (int argc, char** argv) {
 
 int* codedMsg = (int*) malloc((msgLengthInBits+1)*sizeof(int));
   encode(msg, codedMsg);
-
+  printf("CODEDMSG: \n");
+  showArray(codedMsg, msgLengthInBits);
+  printf("\n--------------------------------------------\n");
 
   const size_t paddedMsgSize = calcPaddedSize(msgLengthInBits);
   int* paddedMsg = (int*) malloc((paddedMsgSize+1)*sizeof(int));
@@ -79,15 +81,13 @@ int* codedMsg = (int*) malloc((msgLengthInBits+1)*sizeof(int));
 
   hashComputation (numberOfBlocks, paddedMsg, paddedMsgSize, resultOfHash , LENGOFHASH, workingVariables);  
   
-  char decodedResult[40];
-
-  decode (resultOfHash, LENGOFHASH, decodedResult);
+ 
   
   char hexaDecimalResult [LENGTHHEXADEC];
   binary2Hex (resultOfHash, LENGOFHASH, hexaDecimalResult, LENGTHHEXADEC);
   printf("\nSHA1 = ");
   showArrayChar(hexaDecimalResult, LENGTHHEXADEC);
-
+  printf("\n");
   showArray(resultOfHash, LENGOFHASH);
 
   

@@ -12,17 +12,16 @@
 
 void padding (int* codedMsg, size_t codedMsgSize ,int* paddedMsg, size_t paddedMsgSize) {
   
-  int binary[LENGTHMSG];
+  int binary[LENGTHMSG] = {0};
   number2Binary(codedMsgSize, binary, LENGTHMSG);
-
   int j = 0; 
   for (int i = 0; i<paddedMsgSize; i++) {
 
     if (i < codedMsgSize) {
-      *(paddedMsg + i) = *(codedMsg+i);
+      *(paddedMsg + i) = *(codedMsg + i);
     }else if (i == codedMsgSize) {
       *(paddedMsg + i) = FIRST_PADDING;
-    }else if (i < paddedMsgSize-LENGTHMSG-1) {
+    }else if (i <= paddedMsgSize-LENGTHMSG-1) {
       *(paddedMsg + i) = LATER_PADDING;
     } else { 
       *(paddedMsg + i) = *(binary + j);
