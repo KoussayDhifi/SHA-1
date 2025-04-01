@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "../include/decode.h"
 
+#define LENGTHOFCONVERSION 4
 
 uintmax_t binary2Number (int* x, int n) {
   int power = n-1;
@@ -22,7 +23,32 @@ uintmax_t binary2Number (int* x, int n) {
 
 }
 
+char decimal2Hex (int decimal) {
+  
+  if (decimal < 10) {
+    return '0' + decimal;
+  }else {
+    return 'a' + (decimal - 10);
+  }
 
+
+}
+
+void binary2Hex (int* binaryArray, int lengthOfBinaryArray, char* hexConv,int lengthOfHex) {
+
+  int aux [LENGTHOFCONVERSION];
+  int j = 0;
+  int hexCounter = lengthOfHex - 1;
+  for (int i = lengthOfBinaryArray - 1; i >= 0; i--) {
+    aux [LENGTHOFCONVERSION - 1 - j++] = * (binaryArray + i);
+    if (i % 4 == 0) {
+      int decimalValue = binary2Number (aux, LENGTHOFCONVERSION);
+      *(hexConv + hexCounter--) = decimal2Hex(decimalValue);
+      j = 0;
+    }
+  }
+
+}
 
 void binary2Char(int* binary, char* c) {
   int power = 7;
