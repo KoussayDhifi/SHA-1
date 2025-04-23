@@ -48,15 +48,13 @@ void main (int argc, char** argv) {
 
 int* codedMsg = (int*) malloc((msgLengthInBits+1)*sizeof(int));
   encode(msg, codedMsg);
-  printf("CODEDMSG: \n");
-  showArray(codedMsg, msgLengthInBits);
-  printf("\n--------------------------------------------\n");
+
 
   const size_t paddedMsgSize = calcPaddedSize(msgLengthInBits);
   int* paddedMsg = (int*) malloc((paddedMsgSize+1)*sizeof(int));
 
   padding(codedMsg, msgLengthInBits, paddedMsg, paddedMsgSize);
-  printf("SIZE_PADDED_MSG: %d", paddedMsgSize); 
+
   int numberOfBlocks = paddedMsgSize/512;
   int resultOfHash[LENGOFHASH];
   int workingVariables [5][32];
@@ -85,10 +83,10 @@ int* codedMsg = (int*) malloc((msgLengthInBits+1)*sizeof(int));
   
   char hexaDecimalResult [LENGTHHEXADEC];
   binary2Hex (resultOfHash, LENGOFHASH, hexaDecimalResult, LENGTHHEXADEC);
-  printf("\nSHA1 = ");
+  printf("SHA1 = ");
   showArrayChar(hexaDecimalResult, LENGTHHEXADEC);
   printf("\n");
-  showArray(resultOfHash, LENGOFHASH);
+
 
   
   
