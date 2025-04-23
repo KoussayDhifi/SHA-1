@@ -17,34 +17,22 @@
 
 
 void leftShift(int* x, int n, int* res) {
-  
-  for (int i = n; i<WORDSIZE+n; i++) {
-    if (i < WORDSIZE) {
-    *(res + (i-n) ) = *(x + i); 
-    
-    }else {
-      
-      *(res + (i-n)) = ZERO;
-
-    }
+  for (int i = 0; i < WORDSIZE; i++) {
+    if (i + n < WORDSIZE)
+      *(res + i) = *(x + i + n);
+    else
+      res[i] = ZERO;
   }
-
 }
 
 
 void rightShift(int* x, int n, int* res) {
-
-  for (int i = 0; i<WORDSIZE; i++) {
-    
-    if (i < n) {
+  for (int i = 0; i < WORDSIZE; i++) {
+    if (i < n)
       *(res + i) = ZERO;
-    
-    }else {
+    else
+      *(res + i) = *(x + i - n);
       
-      *(res + i) = *(x + i);
-    
-
-    }
   }
 }
 
@@ -245,9 +233,7 @@ void messageScheduler (int* paddedMsg, int res[32], int t, int n, int paddedMsgS
 
   if (paddedMsg == NULL || res == NULL) printf("INVALID");
   
-  if (t == 0){ printf("PaddedMSG:");showArray2(paddedMsg, paddedMsgSize);
-  printf("\n-+------------------------------------------------\n");
-  }
+  
   static int wCache [ITERATIONS][WORDSIZE] = {0};
   
    
@@ -260,15 +246,7 @@ void messageScheduler (int* paddedMsg, int res[32], int t, int n, int paddedMsgS
     }
 
   }else {
-    printf("wCache[%d] = ", t-3);
-    showArray2(wCache[t-3],WORDSIZE);
-    printf("wCache[%d] = ", t-8);
-    showArray2(wCache[t-8],WORDSIZE);
-    printf("wCache[%d] = ", t-14);
-    showArray2(wCache[t-14],WORDSIZE);
-    printf("wCache[%d] = ", t-16);
-    showArray2(wCache[t-16],WORDSIZE);
-
+  
     int* XorOne = logicalXOR(wCache[t-3], wCache[t-8]);
     int* XorTwo = logicalXOR(wCache[t-14], wCache[t-16]);
     int* finalXOR = logicalXOR(XorOne, XorTwo);
